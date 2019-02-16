@@ -59,9 +59,9 @@ This project implements [cubic splines](https://en.wikipedia.org/wiki/Spline_(ma
 
 This step analyzes the localization and sensor fusion data for all cars on the same side of the track, including the ego vehicle.
 
-In lines [261](./src/main.cpp#261) to [307](./src/main.cpp#307) of `main.cpp`, the positions of all the other vehicles are analyzed relative to the ego vehicle. If the ego vehicle is within 30 meters of the vehicle in front, the boolean too_close is flagged true. If vehicles are within that margin on the left or right, car_left or car_right are flagged true, respectively.
+In lines [264](./src/main.cpp#L264) to [310](./src/main.cpp#L310) of `main.cpp`, the positions of all the other vehicles are analyzed relative to the ego vehicle. If the ego vehicle is within 30 meters of the vehicle in front, the boolean too_close is flagged true. If vehicles are within that margin on the left or right, car_left or car_right are flagged true, respectively.
 
-In lines [309](./src/main.cpp#309) to [338](./src/main.cpp#338) of `main.cpp`, decisions are made on how to adjust speed and change lanes. If a car is ahead within the gap, the lanes to the left and right are checked. If one of them is empty, the car will change lanes. Otherwise it will slow down.
+In lines [313](./src/main.cpp#L313) to [341](./src/main.cpp#L341) of `main.cpp`, decisions are made on how to adjust speed and change lanes. If a car is ahead within the gap, the lanes to the left and right are checked. If one of them is empty, the car will change lanes. Otherwise it will slow down.
 
 The car will move back to the center lane when it becomes clear. This is because a car can move both left and right from the center lane, and it is more likely to get stuck going slowly if on the far left or right.
 
@@ -69,15 +69,13 @@ If the area in front of the car is clear, no matter the lane, the car will speed
 
 ### Trajectory Generation
 
-Lines [340](./src/main.cpp#340) to [445](./src/main.cpp#445) of `main.cpp` compute the trajectory of the vehicle from the decisions made above, the vehicle's position, and historical path points. 
+Lines [344](./src/main.cpp#L344) to [448](./src/main.cpp#L448) of `main.cpp` compute the trajectory of the vehicle from the decisions made above, the vehicle's position, and historical path points. 
 
-In lines [340](./src/main.cpp#340) to [401](./src/main.cpp#401) of main.cpp, the last two points in the already-covered terrain are computed. If the vehicle has not yet moved 60 meters, the vehicle's current position is used instead of the historical waypoints. In addition, the Frenet helper function getXY() is used to generate three points spaced evenly at 30 meters in front of the car
+In lines [344](./src/main.cpp#L344) to [407](./src/main.cpp#L407) of main.cpp, the last two points in the already-covered terrain are computed. If the vehicle has not yet moved 60 meters, the vehicle's current position is used instead of the historical waypoints. In addition, the Frenet helper function getXY() is used to generate three points spaced evenly at 30 meters in front of the car
 
 Because splines are the method used to generate the trajectory, a shift and rotate transform is applied.
 
-In lines [403](./src/main.cpp#403) to [445](./src/main.cpp#445) of `main.cpp`, the computed waypoints are transformed using a spline. The spline makes it relatively easy to compute a smooth trajectory in 2D space while taking into account acceleration and velocity.
-
-50 waypoints are generated in total. Because the length of the generated trajectory is variable, after the vehicle has assumed the correct position, the rest of the waypoints are generated to keep the vehicle in the target lane. This can be observed by watching the green trajectory line in front of the vehicle as a lane change occurs ([in the video](https://www.youtube.com/watch?v=34YczKN08eo&feature=youtu.be)).
+In lines [407](./src/main.cpp#L407) to [448](./src/main.cpp#L448) of `main.cpp`, the computed waypoints are transformed using a spline. The spline makes it relatively easy to compute a smooth trajectory in 2D space while taking into account acceleration and velocity.
 
 ## Data used in the project
 
